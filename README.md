@@ -1,3 +1,3 @@
 # STV
-Idea by @Klemen
+Idea by @Klemen <br> <br> 
 A prototype for Single Transferable Vote. 
