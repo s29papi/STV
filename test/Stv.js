@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-var bytes = require('bytes');
+//  to run, run this in the terminal => npx hardhat test test/Stv.js
 
 describe("Stv Factory Contract", function () {
   let owner;
@@ -27,7 +27,9 @@ describe("Stv Factory Contract", function () {
  
     // deploy an Stv contract
     const deploy = await hardhatSTVFactory.deploy(voteName, date, duration, proposals)
-    const receipt = await deploy.wait()
+    const receipt = await deploy.wait(
+
+    )
     Stv_address = receipt.events[0].args[0];
     console.log("Deployed Stv address:",receipt.events[0].args[0])
   });

@@ -23,14 +23,14 @@ contract Stv {
     mapping(uint8 => bytes32) public Ballot;
 
     constructor(string memory _voteName, uint _date, uint _duration, bytes32[] memory _proposalNames) {
-                       VoteName  = _voteName; 
-                       Date      = _date;
-                       Duration  = _duration;
-                       for (uint8 start  = 0; start < _proposalNames.length; start++)    {
-                                Proposals.push(Proposal({
-                                    name: _proposalNames[start]
-                                }));
-                       }
+                VoteName  = _voteName; 
+                Date      = _date;
+                Duration  = _duration;
+                for (uint8 start  = 0; start < _proposalNames.length; start++)    {
+                        Proposals.push(Proposal({
+                            name: _proposalNames[start]
+                        }));
+                }
     }
 
     function     _createBallot()               private                            {
@@ -55,7 +55,7 @@ contract Stv {
              
     }  
 
-    function isVoteValid(uint8[] preferenceRank)    public    returns    (bool)    {
+    function isVoteValid(uint8[] memory preferenceRank)    public    returns    (bool)    {
                 require(preferenceRank.length == Proposals.length, "Vote exceeds the number of proposals");
                 for (uint8 start  = 0; start  < preferenceRank.length; start++)    {
                     if (preferenceRank[start] > Proposals.length)            {
