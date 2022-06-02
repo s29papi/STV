@@ -16,7 +16,6 @@ contract Stv {
     // Proposal == representative
     struct Proposal {
            bytes32 name;
-        //    uint8[] voteCount;// if someone ranks this proposal as first index[0] == 1, another vote index [0] == 2 
     }
 
     Proposal[] public Proposals;
@@ -48,7 +47,7 @@ contract Stv {
                  _createBallot();
                  isBallotCreated = true;
     }
-
+    // comment out vote function and you can run a test
     function     vote(uint8[] preferenceRank) external                             {
                  if  (isVoteValid(preferenceRank)) {
                   // would continue in the morning
