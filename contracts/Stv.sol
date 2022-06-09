@@ -3,6 +3,7 @@ pragma solidity ^0.7.0;
 import "hardhat/console.sol";
 
 
+
 contract Stv {   
     event    BallotCreated (string voteName, uint256 noProposalOrRepresentatives);
     event    UserSuccessfullyVoted (string success, uint256[] preference);
@@ -30,13 +31,18 @@ contract Stv {
 
     // Election name e.g presidential elections, company 3rd annual budget voting
     // Any name that accurately represents the election
-    string                  private   ElectionName;
-    uint          immutable private   ElectionDate;
-    uint          immutable private   ElectionDuration;
-    bytes32[]               private   ElectionProposals;
+    string                  public   ElectionName;
+    uint          immutable public   ElectionDate;
+    uint          immutable public   ElectionDuration;
+    bytes32[]               private  ElectionProposals;
+
+    // used in proposal threshold function,
+    // in a multivote election the winners are usually more than one representatives 
+    // or proposals. TotalNoOfAvailableSlots is the number of this winners.
+    uint          immutable public   TotalNoOfAvailableSlots;
 
     // used in the mapping ballot to store and retrieve the total number of proposals   
-    bytes32       constant  private   TotalNoOfProposal  =  "Total No Of Proposal";
+    bytes32       constant  public   TotalNoOfProposal  =  "Total No Of Proposal";
 
     // => Perfect Candidate information
     
@@ -45,11 +51,11 @@ contract Stv {
     // a) what a pefect score / vote would have looked like if a candidate was selected
     //    as the prefered candidate by everyone
     // b) gives information also about how many votes came in. i.e PerfectCandidateTotalVote / 100 %
-    uint16        constant  public  PerfectCandidateID   = 1000;
-    bytes32       constant  public  PerfectCandidateNAME = "Perfect_Candidate_NAME";
+    uint16        constant  public   PerfectCandidateID   = 1000;
+    bytes32       constant  public   PerfectCandidateNAME = "Perfect_Candidate_NAME";
     
-    bool                   private   isBallotCreated;
-    bool                   private   isElectionProposalsPassed;
+    bool                    public   isBallotCreated;
+    bool                    public   isElectionProposalsPassed;
 
 
 
@@ -64,7 +70,7 @@ contract Stv {
     //          .          |                          |      
     //          n          |  "Total No Of Proposal"  | Cummulated No of Proposal     
     // PerfectCandidateID  |   PerfectCandidateNAME   | Cummulated Votes of an imaginery Perfect Candidate    
-    mapping (uint256  =>   mapping(bytes32 => uint256))         private Ballot;
+    mapping (uint256  =>   mapping(bytes32 => uint256))          public Ballot;
 
     // might remove the struct above for this, this helps track a voters alternative choice
     // e.g what percentage of people voted this proposal as second choice
@@ -77,21 +83,13 @@ contract Stv {
 
 
 
-    constructor(string memory _electionName, uint _electionDate, uint _electionDuration) {
-                ElectionName      = _electionName; 
-                ElectionDate      = _electionDate;
-                ElectionDuration  = _electionDuration;
+    constructor(string memory _electionName, uint _electionDate, uint _electionDuration, uint _totalNoOfAvailableSlots) {
+                ElectionName            = _electionName; 
+                ElectionDate            = _electionDate;
+                ElectionDuration        = _electionDuration;
+                TotalNoOfAvailableSlots = _totalNoOfAvailableSlots;
     }
 
-    function    viewElectionName()             public view returns (string memory)       {
-                return ElectionName;
-    }
-    function    viewElectionDate()             public view returns (uint)                {
-                return ElectionDate;
-    }
-    function    viewElectionDuration()         public view returns (uint)                {
-                return ElectionDuration;
-    }
     function    viewElectionProposals()        public view returns (bytes32[] memory)    {
                 if (!isElectionProposalsPassed) {
                      revert("Election Proposal has not been passed");
@@ -138,14 +136,14 @@ contract Stv {
     // To get total ballot count on or for each proposal loop round getProposalCount(uint8 _proposalNo) 
     // by the number of proposals.
     function     getProposalCount(uint8 _proposalNo)   public      view      returns (uint256)         {
-                 uint256 numerator   = Ballot[_proposalNo][ElectionProposals[_proposalNo]] * 10 ** 18;
+                 uint256 numerator   = Ballot[_proposalNo][ElectionProposals[_proposalNo]] * 100 * 10 ** 18;
                  uint256 denominator = Ballot[PerfectCandidateID][PerfectCandidateNAME];
                  return  numerator / denominator;
     }
 
     function     ProposalThreshold()                   public      view      returns (uint256)         {
                  uint256   numerator   =  100 * 10 ** 18;
-                 uint256   denominator =  ElectionProposals.length * 100;
+                 uint256   denominator =  TotalNoOfAvailableSlots;
                  return    numerator   /  denominator;
     }
 

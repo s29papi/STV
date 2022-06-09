@@ -6,8 +6,8 @@ contract STVFactory {
         event    Deploy(address contractAddr);
 
        
-        function deploy(string  memory _electionName, uint _electionDate, uint _electionDuration)    external     {
-                        Stv    _contract = new Stv(_electionName, _electionDate, _electionDuration);
+        function deploy(string  memory _electionName, uint _electionDate, uint _electionDuration, uint _totalNoOfAvailableSlots)    external     {
+                        Stv    _contract = new Stv(_electionName, _electionDate, _electionDuration, _totalNoOfAvailableSlots);
                         emit   Deploy(address(_contract));
         }
 }

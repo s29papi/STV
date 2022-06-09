@@ -18,15 +18,16 @@ describe("Stv Factory Contract", function () {
     await hardhatSTVFactory.deployed();
     
     // STV Contract deploy params
-    const ElectionName       = "Vote for Budget";
-    const ElectionDate       =  90; // dummy
-    const ElectionDuration   =  92; // dummy
+    const ElectionName              = "Vote for Budget";
+    const ElectionDate              =  90; // dummy
+    const ElectionDuration          =  92; // dummy
+    const TotalNoOfAvailableSlots   =  3; 
  
     // deploy the Stv contract
-    const deploy = await hardhatSTVFactory.deploy(ElectionName, ElectionDate, ElectionDuration)
+    const deploy = await hardhatSTVFactory.deploy(ElectionName, ElectionDate, ElectionDuration, TotalNoOfAvailableSlots)
     const receipt = await deploy.wait()
     Stv_address = receipt.events[0].args[0];
-    console.log("Deployed Stv address:",receipt.events[0].args[0])
+    console.log("Deployed Stv address:",Stv_address)
   });
 
   it("Tests and verifies the constructor args were assigned rightly", async function () {
@@ -34,15 +35,17 @@ describe("Stv Factory Contract", function () {
     // ElectionName
     // ElectionDate
     // ElectionDuration
-    const   Stv                  = await ethers.getContractFactory("Stv");
-    const   hardhatStv           = await Stv.attach(Stv_address);
-    const   ElectionName         = await hardhatStv.viewElectionName();
-    const   ElectionDate         = await hardhatStv.viewElectionDate();
-    const   ElectionDuration     = await hardhatStv.viewElectionDuration();
+    const   Stv                         = await ethers.getContractFactory("Stv");
+    const   hardhatStv                  = await Stv.attach(Stv_address);
+    const   ElectionName                = await hardhatStv.ElectionName();
+    const   ElectionDate                = await hardhatStv.ElectionDate();
+    const   ElectionDuration            = await hardhatStv.ElectionDuration();
+    const   TotalNoOfAvailableSlots     = await hardhatStv.TotalNoOfAvailableSlots();
     // log to stout
     console.log(`The Election Name is ${ElectionName}`)
     console.log(`The Election Date is ${ElectionDate}`)
     console.log(`The Election Duration is ${ElectionDuration}`)
+    console.log(`The Total No Of Available Slots is ${ElectionDuration}`)
   });
 
   
@@ -75,7 +78,7 @@ describe("Stv Factory Contract", function () {
     await   hardhatStv.passElectionProposals(proposals) ;
   });
 
-  it("view election proposals after passing proposals", async function () {
+  it("views election proposals after passing proposals", async function () {
     const   Stv                 =  await   ethers.getContractFactory("Stv");
     const   hardhatStv          =  await   Stv.attach(Stv_address);
     const   ElectionProposals   =  await   hardhatStv.viewElectionProposals();
@@ -98,22 +101,22 @@ describe("Stv Factory Contract", function () {
   });
 
 
-  // proper way too test would be commenting out passing of proposals
-  // this should make creating a ballot fail
-  // A ballot can only be created if a ballot hasn't been previously created
-  // and the election proposals have passed
-  it("checks if ballot is created, and proposals have passed", async function () {
-    const   Stv             = await ethers.getContractFactory("Stv");
-    const   hardhatStv      = await Stv.attach(Stv_address);
+//   // proper way too test would be commenting out passing of proposals
+//   // this should make creating a ballot fail
+//   // A ballot can only be created if a ballot hasn't been previously created
+//   // and the election proposals have passed
+//   it("checks if ballot is created, and proposals have passed", async function () {
+//     const   Stv             = await ethers.getContractFactory("Stv");
+//     const   hardhatStv      = await Stv.attach(Stv_address);
 
-    const   isBallotCreated = await hardhatStv.viewIsBallotCreated()
-    if      (isBallotCreated)  {  console.log("Ballot has been created")  }
+//     const   isBallotCreated = await hardhatStv.viewIsBallotCreated()
+//     if      (isBallotCreated)  {  console.log("Ballot has been created")  }
 
-    const   IsElectionProposalsPassed = await hardhatStv.viewIsElectionProposalsPassed
-    if      (IsElectionProposalsPassed)  {  console.log("Election proposal have passed")  }
-    // call again to confirm ballot can only be created once
-    // await hardhatStv.createBallot(); 
-  });
+//     const   IsElectionProposalsPassed = await hardhatStv.viewIsElectionProposalsPassed
+//     if      (IsElectionProposalsPassed)  {  console.log("Election proposal have passed")  }
+//     // call again to confirm ballot can only be created once
+//     // await hardhatStv.createBallot(); 
+//   });
 
   it("votes on a ballot in the deployed Stv contract", async function () {
     const   Stv             = await ethers.getContractFactory("Stv");
@@ -134,27 +137,27 @@ describe("Stv Factory Contract", function () {
     }
   });
 
- // comment out the code to test
-  it("should fail, because wrong voting args were passed", async function () {
-    // const   Stv             = await ethers.getContractFactory("Stv");
-    // const   hardhatStv      = await Stv.attach(Stv_address);
+//  // comment out the code to test
+//   it("should fail, because wrong voting args were passed", async function () {
+//     // const   Stv             = await ethers.getContractFactory("Stv");
+//     // const   hardhatStv      = await Stv.attach(Stv_address);
     
-    //  // this votes should 
-    // // preferable to test each seperately as the first would revert and not give
-    // // chance for the others to be evaluated
-    // let user_Test_vote1 = [4,0,2,1]; // should fail if users votes preference of zero
-    // let user_Test_vote2 = [4,3,6,1]; // should fail if users votes preference above the no of proposal or representatives
-    // let user_Test_vote3 = [4,3,6,1,0]; // should fail if users votes preference above the no of proposal or representatives
-    // let user_Test_vote3 = [4,3,6]; // should fail if users votes preference above the no of proposal or representatives
+//     //  // this votes should 
+//     // // preferable to test each seperately as the first would revert and not give
+//     // // chance for the others to be evaluated
+//     // let user_Test_vote1 = [4,0,2,1]; // should fail if users votes preference of zero
+//     // let user_Test_vote2 = [4,3,6,1]; // should fail if users votes preference above the no of proposal or representatives
+//     // let user_Test_vote3 = [4,3,6,1,0]; // should fail if users votes preference above the no of proposal or representatives
+//     // let user_Test_vote3 = [4,3,6]; // should fail if users votes preference above the no of proposal or representatives
     
-    // let unsuccessful_votes = [ user_Test_vote2, user_Test_vote1] 
-    // for (let start = 0; start < unsuccessful_votes.length; start++) {
-    //   let vote = await hardhatStv.vote(unsuccessful_votes[start]);
-    //   // events emitted
-    //   let receipt = await vote.wait() 
-    //   console.log(`${receipt.events[0].args[0]}; this were your preference ${receipt.events[0].args[1]};`)
-    // }
-  });
+//     // let unsuccessful_votes = [ user_Test_vote2, user_Test_vote1] 
+//     // for (let start = 0; start < unsuccessful_votes.length; start++) {
+//     //   let vote = await hardhatStv.vote(unsuccessful_votes[start]);
+//     //   // events emitted
+//     //   let receipt = await vote.wait() 
+//     //   console.log(`${receipt.events[0].args[0]}; this were your preference ${receipt.events[0].args[1]};`)
+//     // }
+//   });
 
   it("gets the Ballot count after the vote take place", async function () {
     const   Stv             = await ethers.getContractFactory("Stv");
