@@ -4,6 +4,8 @@
 Idea by @Klemen, used in the Encode Polygon Hackathon<br>
 
 STV Factory address: 0xe32435E76fC9A242a351591fFC28b66e3A386335<br> 
+STV Factory Tests: test/voteMumbai.js && test/stvFactoryMumbai.js<br> 
+Instruction to run all test files are present in the files.
 
 ## What is Single Transferable Vote ?
 
