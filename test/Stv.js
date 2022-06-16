@@ -73,7 +73,7 @@ describe("Stv Factory Contract", function () {
     let proposal_seven  = ethers.utils.formatBytes32String("Budget B: $34500")
     let proposal_eight  = ethers.utils.formatBytes32String("Budget B: $2509000")
     let proposal_nine   = ethers.utils.formatBytes32String("Budget B: $200")
-    proposals           = [proposal_one, proposal_two, proposal_three, proposal_four, proposal_five, proposal_six, proposal_seven, proposal_eight, proposal_nine]
+    proposals           = [proposal_one, proposal_two, proposal_three, proposal_four, proposal_five]
 
     await   hardhatStv.passElectionProposals(proposals) ;
   });
@@ -88,17 +88,17 @@ describe("Stv Factory Contract", function () {
     }
   });
 
-  it("creates a ballot with the Stv contract", async function () {
-    const   Stv             = await ethers.getContractFactory("Stv");
-    const   hardhatStv      = await Stv.attach(Stv_address);
-    // createBallot()
-    // calls _createBallot(), which Takes in args of proposals or candidates or representative
-    // Which would be competing for votes to be voted on
-    // proposals or candidates or representative
-    const createBallot = await   hardhatStv.createBallot();
-    const receipt      = await   createBallot.wait();
-    console.log(`createBallot(...) event_1: ${receipt.events[0].args[0]}, event_2: ${receipt.events[0].args[1]}`)
-  });
+  // it("creates a ballot with the Stv contract", async function () {
+  //   const   Stv             = await ethers.getContractFactory("Stv");
+  //   const   hardhatStv      = await Stv.attach(Stv_address);
+  //   // createBallot()
+  //   // calls _createBallot(), which Takes in args of proposals or candidates or representative
+  //   // Which would be competing for votes to be voted on
+  //   // proposals or candidates or representative
+  //   const createBallot = await   hardhatStv.createBallot();
+  //   const receipt      = await   createBallot.wait();
+  //   console.log(`createBallot(...) event_1: ${receipt.events[0].args[0]}, event_2: ${receipt.events[0].args[1]}`)
+  // });
 
 
 //   // proper way too test would be commenting out passing of proposals
@@ -122,12 +122,19 @@ describe("Stv Factory Contract", function () {
     const   Stv             = await ethers.getContractFactory("Stv");
     const   hardhatStv      = await Stv.attach(Stv_address);
     // users vote by preference
-    let user_one_vote   = [4,3,2,1,5,7,8,6,9];
-    let user_two_vote   = [1,2,3,4,6,5,9,8,7];
-    let user_three_vote = [3,1,4,2,8,7,5,6,9];
-    let user_four_vote  = [2,1,3,4,9,8,5,6,7];
+    // How does this work
+    // I vote my preference entry as an array
+    // each entry represents a proposal
+    // I add the proposal cummulative preference by
+    // an example would be an abitrary proposal a, look below
+    // ( 100 / entry_one[a] ) + ( 100 / entry_two[a] ) + ( 100 / entry_third[a] ) + ... + ( 100 / entry_n[a] )
+    let user_one_vote   = [4,3,2,1,5];
+    // let user_two_vote   = [1,2,3,4,6,5,9,8,7];
+    // let user_three_vote = [3,1,4,2,8,7,5,6,9];
+    // let user_four_vote  = [2,1,3,4,9,8,5,6,7];
     //  
-    let users_vote = [user_one_vote, user_two_vote, user_three_vote, user_four_vote]
+    // let users_vote = [user_one_vote, user_two_vote, user_three_vote, user_four_vote]
+    let users_vote = [user_one_vote]
     // vote 
     for (let start = 0; start < users_vote.length; start++) {
             let vote = await hardhatStv.vote(users_vote[start]);
@@ -136,6 +143,28 @@ describe("Stv Factory Contract", function () {
             console.log(`${receipt.events[0].args[0]}; this were your preference ${receipt.events[0].args[1]};`)
     }
   });
+
+  // it("finds a voter prefered proposal", async function () {
+  //   const   Stv             = await ethers.getContractFactory("Stv");
+  //   const   hardhatStv      = await Stv.attach(Stv_address);
+   
+  //   let user_one_vote   = [4,3,2,1,5,7,8,6,9];
+  //   let user_two_vote   = [1,2,3,4,6,5,9,8,7];
+  //   let user_three_vote = [3,1,4,2,8,7,5,6,9];
+  //   let user_four_vote  = [2,1,3,4,9,8,5,6,7];
+     
+  //    let users_vote = [user_one_vote, user_two_vote, user_three_vote, user_four_vote]
+  //   // let users_vote = [user_one_vote, user_two_vote]
+  //   // vote 
+  //   for (let start = 0; start < users_vote.length; start++) {
+  //           let preferedProposalBytes = await hardhatStv.findPreferedProposal(users_vote[start]);
+            
+  //           // let   originalText    = ethers.utils.parseBytes32String(preferedProposalBytes);
+  //           // console.log(`Prefered Election proposal: ${start}.) ${originalText}`)
+  //           // let receipt = await vote.wait() 
+  //           // console.log(`${receipt.events[0].args[0]}; this were your preference ${receipt.events[0].args[1]};`)
+  //   }
+  // });
 
 //  // comment out the code to test
 //   it("should fail, because wrong voting args were passed", async function () {
@@ -159,30 +188,30 @@ describe("Stv Factory Contract", function () {
 //     // }
 //   });
 
-  it("gets the Ballot count after the vote take place", async function () {
-    const   Stv             = await ethers.getContractFactory("Stv");
-    const   hardhatStv      = await Stv.attach(Stv_address);
-    for (let start = 0; start < proposals.length; start++) {
-            let   proposalCount   = await hardhatStv.getProposalCount(start)
-            let   originalText    = ethers.utils.parseBytes32String(proposals[start]);
-             console.log(`Ballot Proposal count ${start}. ${originalText} voteCount ${proposalCount}`)
-    }
-  }); 
+  // it("gets the Ballot count after the vote take place", async function () {
+  //   const   Stv             = await ethers.getContractFactory("Stv");
+  //   const   hardhatStv      = await Stv.attach(Stv_address);
+  //   for (let start = 0; start < proposals.length; start++) {
+  //           let   proposalCount   = await hardhatStv.getProposalCount(start)
+  //           let   originalText    = ethers.utils.parseBytes32String(proposals[start]);
+  //            console.log(`Ballot Proposal count ${start}. ${originalText} voteCount ${proposalCount}`)
+  //   }
+  // }); 
       
 
-  it("validates if a proposal is above the proposal threshold", async function () {
-    const   Stv             = await ethers.getContractFactory("Stv");
-    const   hardhatStv      = await Stv.attach(Stv_address);
+  // it("validates if a proposal is above the proposal threshold", async function () {
+  //   const   Stv             = await ethers.getContractFactory("Stv");
+  //   const   hardhatStv      = await Stv.attach(Stv_address);
 
-    // check for proposal threshold
-    let     Threshold       = await hardhatStv.ProposalThreshold()
-    console.log(`Ballot Proposal Threshold: ${Threshold}`)
-    // validates if a proposal is above the proposal threshold
-    for (let start = 0; start < proposals.length; start++) {
-            let   isAboveThreshold   = await hardhatStv.isProposalAboveThreshold(start)
-            let   originalText    = ethers.utils.parseBytes32String(proposals[start]);
-             console.log(`Ballot Proposal ${start}. ${originalText} isAboveThreshold: ${isAboveThreshold}`)
-    }
-  });
+  //   // check for proposal threshold
+  //   let     Threshold       = await hardhatStv.ProposalThreshold()
+  //   console.log(`Ballot Proposal Threshold: ${Threshold}`)
+  //   // validates if a proposal is above the proposal threshold
+  //   for (let start = 0; start < proposals.length; start++) {
+  //           let   isAboveThreshold   = await hardhatStv.isProposalAboveThreshold(start)
+  //           let   originalText    = ethers.utils.parseBytes32String(proposals[start]);
+  //            console.log(`Ballot Proposal ${start}. ${originalText} isAboveThreshold: ${isAboveThreshold}`)
+  //   }
+  // });
 });
 
