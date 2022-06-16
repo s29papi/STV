@@ -14,7 +14,10 @@ vote may be transferred according to voters preferences if their preferred candi
 
     Process
     Illustrated Below
-    First, a voter casts a single vote in the form of a ranked-choice ballot in our case, a vote function is called <br> which takes the arguments preferedProposal and preferenceRank. preferedProposal is an unsigned integer which represents the prefered proposal, preferenceRank is an unsigned integer array which represents a voters ranked-choice ballot.
+    First, a voter casts a single vote in the form of a ranked-choice ballot in our case,
+    a vote function is called which takes the arguments preferedProposal and preferenceRank. 
+    preferedProposal is an unsigned integer which represents the prefered proposal, 
+    preferenceRank is an unsigned integer array which represents a voters ranked-choice ballot.
     
 
 <br> <br>
