@@ -12,13 +12,14 @@ Instruction to run all test files are present in the files.
 A.K.A preferential voting with multiple vacancies, is an electorial voting system based on proportional representation and ranked voting, used to elect multiple candidates, proposals or representatives, were a
 vote may be transferred according to voters preferences if their preferred candidate is eliminated, so that their vote still counts.
 
-    Process
-    Illustrated Below
+    Process is Illustrated Below,
+    
     First, a voter casts a single vote in the form of a ranked-choice ballot in our case,
     a vote function is called which takes the arguments preferedProposal and preferenceRank. 
     preferedProposal is an unsigned integer which represents the prefered proposal, 
     preferenceRank is an unsigned integer array which represents a voters ranked-choice ballot.
     
+
 
 <br> <br>
 
