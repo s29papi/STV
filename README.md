@@ -24,8 +24,9 @@ preferedProposal is an unsigned integer which represents the prefered proposal,
 preferenceRank is an unsigned integer array which represents a voters ranked-choice ballot.
 
     The vote function,
-    
-    function     vote(uint256 preferedProposal, uint256[] calldata preferenceRank) external    isVoteValid(preferenceRank)    {...}
+
+    function     vote(uint256 preferedProposal, uint256[] calldata preferenceRank) external
+    isVoteValid(preferenceRank)    {...}
     
     
 
