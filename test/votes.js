@@ -88,8 +88,22 @@ describe("Stv Factory Contract", function () {
     let user_two_vote   = [4,2,3,1];
     let user_three_vote = [3,4,2,1];
     let user_four_vote  = [1,3,4,2];
+    let user_five_vote   = [1,3,2,4];
+    let user_six_vote   = [4,2,3,1];
+    let user_seven_vote = [3,4,2,1];
+    let user_eight_vote  = [1,3,4,2];
+    let user_nine_vote   = [1,3,2,4];
+    let user_ten_vote   = [4,2,3,1];
+    let user_eleven_vote = [3,4,2,1];
+    let user_twelve_vote  = [1,3,4,2];
+    let user_thirteen_vote   = [1,3,2,4];
+    let user_fourteen_vote   = [4,2,3,1];
+    let user_fifteen_vote = [3,4,2,1];
+    let user_sixteen_vote  = [1,3,4,2];
     
-    let users_vote = [user_one_vote, user_two_vote, user_three_vote, user_four_vote];
+    let users_vote = [user_one_vote, user_two_vote, user_three_vote, user_four_vote, user_five_vote, user_six_vote,
+                     user_seven_vote, user_eight_vote, user_nine_vote, user_ten_vote, user_eleven_vote, user_twelve_vote,
+                     user_thirteen_vote, user_fourteen_vote, user_fifteen_vote, user_sixteen_vote];
     let users_prefered_proposal;
 
     
@@ -108,6 +122,37 @@ describe("Stv Factory Contract", function () {
             
             console.log(`${receipt.events[0].args[0]}; this were your preference ${receipt.events[0].args[1]};`)
     }
+  });
+
+  it("counts the votes in the stv contract", async function () {
+    const   Stv             = await ethers.getContractFactory("Stv");
+    const   hardhatStv      = await Stv.attach(Stv_address);
+    // await hardhatStv.voteCount("DROOP");
+    await hardhatStv.voteCount("HARE");
+    // let user_one_vote   = [1,3,2,4];
+    // let user_two_vote   = [4,2,3,1];
+    // let user_three_vote = [3,4,2,1];
+    // let user_four_vote  = [1,3,4,2];
+    
+    // let users_vote = [user_one_vote, user_two_vote, user_three_vote, user_four_vote];
+    // let users_prefered_proposal;
+
+    
+    
+    // // vote 
+    // for (let start = 0; start < users_vote.length; start++) {
+    //     for (let i= 0; i < users_vote[start].length; i++) {
+    //         if (users_vote[start][i] == 1) {
+    //             users_prefered_proposal = i;
+    //         }
+    //     }
+
+    //         let vote = await hardhatStv.vote(users_prefered_proposal, users_vote[start]);
+    //         // events emitted
+    //         let receipt = await vote.wait() 
+            
+    //         console.log(`${receipt.events[0].args[0]}; this were your preference ${receipt.events[0].args[1]};`)
+    // }
   });
 
 });

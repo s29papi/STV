@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/mnt/c/Users/LENOVO/Desktop/Stv/contracts/Stv.sol": {
-      "lastModificationDate": 1655374669767,
-      "contentHash": "259c73cb6fa22b965a0a009ebe426833",
+      "lastModificationDate": 1655553511980,
+      "contentHash": "1cf80f60ae879ae9f00ed731cda55805",
       "sourceName": "contracts/Stv.sol",
       "solcConfig": {
         "version": "0.7.0",

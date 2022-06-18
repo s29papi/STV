@@ -7,11 +7,6 @@ import "hardhat/console.sol";
 contract Stv { 
     event    UserSuccessfullyVoted (string success, uint256[] preference);
 
-
-
-
-
-
     // checks if a vote is valid that is:
     // a) the votes do not exceed or are below the number of proposals passed.
     // b) there was no proposal ranked as zero.
@@ -34,14 +29,6 @@ contract Stv {
                _;
     } 
 
-
-
-
-
-
-
-
-
     // => Election information
 
     // Election name e.g presidential elections, company 3rd annual budget voting
@@ -50,21 +37,16 @@ contract Stv {
     uint          immutable public   ElectionDate;
     uint          immutable public   ElectionDuration;
     bytes32[]               private  ElectionProposals;
+    bytes32[]               public   ElectionWinners;
     bool                    public   isElectionProposalsPassed;
 
     // used in proposal threshold function,
     // in a multivote election the winners are usually more than one representatives 
     // or proposals. TotalNoOfAvailableSlots is the number of this winners.
-    uint          immutable public   TotalNoOfAvailableSlots;
+    uint256          immutable public   TotalNoOfAvailableSlots;
 
-    // => Perfect Candidate information
     
-    // A perfect Candidate is the same as a perfect representative or proposal,
-    // it is non existent as it is used to only track 
-    // a) what a pefect score / vote would have looked like if a candidate was selected
-    //    as the prefered candidate by everyone
-    // b) gives information also about how many votes came in. i.e PerfectCandidateTotalVote / 100 %
-    uint256       constant  public   PerfectCandidateID   = 1000;
+    uint256       constant  public   TotalVotesID   = 1000;
     
     
    
@@ -83,17 +65,6 @@ contract Stv {
          uint256 votedWeight;
          mapping(uint256 => NextPreferedProposal) votedPosition;
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     constructor(string memory _electionName, uint _electionDate, uint _electionDuration, uint _totalNoOfAvailableSlots) {
@@ -130,12 +101,22 @@ contract Stv {
                 return isElectionProposalsPassed;
     }
 
-    // Election Quota
-    // What is a Quota
-    
+
+     
+    function    getElectionQuota(string memory quotaName, uint256 votesCast, uint256 numberOfSlots) public pure returns (uint) {
+                    
+                    if (keccak256(abi.encodePacked((quotaName))) == keccak256(abi.encodePacked(("DROOP")))) {
+                         return (votesCast / (numberOfSlots + 1)) + 1;
+                         
+                    }
+                    if (keccak256(abi.encodePacked((quotaName))) == keccak256(abi.encodePacked(("HARE")))) {
+                         return (votesCast / numberOfSlots);
+                         
+                    }
+    }
     
     function     vote(uint256 preferedProposal, uint256[] calldata preferenceRank) external    isVoteValid(preferenceRank)    {
-                    uint256 voteWeight = 100 * 10 ** 18;
+                    uint256 voteWeight = 1;
 
                     if (!isPreferedProposal[preferedProposal]) { 
                                PreferedProposalNo.push(preferedProposal);
@@ -155,14 +136,9 @@ contract Stv {
                          PreferedProposalCount[preferedProposal].votedPosition[preferenceRank[start]].proposalsWeight[start] += voteWeight;   
                     }
 
-                    PreferedProposalCount[PerfectCandidateID].votedWeight += voteWeight;
+                    PreferedProposalCount[TotalVotesID].votedWeight += voteWeight;
                     
                          emit    UserSuccessfullyVoted("You've successfully voted", preferenceRank);
     }  
-
-    
-    
-
-
 
 }
