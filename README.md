@@ -27,8 +27,17 @@ preferenceRank is an unsigned integer array which represents a voters ranked-cho
 
     function     vote(uint256 preferedProposal, uint256[] calldata preferenceRank) external
     isVoteValid(preferenceRank)    {...}
-    
-    
+
+<br>
+Second, votes are stored on chain in this mapping,
+
+    mapping (uint256  =>   PreferedProposal)          public PreferedProposalCount;
+
+Its a tree structure were the root is the prefered proposal and the node is the second prefered proposal,
+and the child node is the third prefered proposal and so on. This is so we would be able to transfer votes.
+
+<br>
+Third, vote counting is computed of chain, the reason for this is, any body, anywhere can quickly recompute the results of a particular election if there are doubts on the result, but vote data cannot be recomputed as it remains on chain and accessible to all.
 
 
 <br> <br>
