@@ -16,8 +16,6 @@ vote may be transferred according to voters preferences if their preferred candi
 
 Before getting started with this repo, below is the process of stv as used here, please read:
 
-<br>
-
 First, a voter casts a single vote in the form of a ranked-choice ballot in our case,
 a vote function is called which takes the arguments preferedProposal and preferenceRank. 
 preferedProposal is an unsigned integer which represents the prefered proposal, 
