@@ -35,7 +35,7 @@ Its a tree structure were the root is the prefered proposal and the node is the 
 and the child node is the third prefered proposal and so on. This is so we would be able to transfer votes.
 
 <br>
-Third, vote counting is computed of chain, the reason for this is, any body, anywhere can quickly recompute the results of a particular election if there are doubts on the result, but vote data cannot be recomputed as it remains on chain and accessible to all.
+Third, vote counting is computed off chain, the reason for this is, any body, anywhere can quickly recompute the results of a particular election if there are doubts on the result. Voting is done on chain, vote data cannot be recomputed, it remains on chain and accessible to all.
 
 
 <br> <br>
